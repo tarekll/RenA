@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class Exclusion {
     public static void main(String[] args) throws Exception {
-        File file = new File("/Users/s0ul/Documents/Programming/Research/commons/ANER/corpus/include/ANERCorp");
+        File file = new File("/Users/s0ul/Documents/Programming/Research/commons/sample/aner_html/universal/3.txt");
 
         String content = ArabicMarshall.normalize(AIO.readUTF8EncodedFile(file));
         RenA ner = RenA.rebuild(new File("commons/demo/ner_demo"));

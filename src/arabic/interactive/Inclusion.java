@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class Inclusion {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        File file = new File("/Users/s0ul/Documents/Programming/Research/commons/sample/aner_html/universal/1.txt");
+        File file = new File("/Users/s0ul/Documents/Programming/Research/commons/sample/aner_html/lebanon/al-akhbar/2.txt");
 
         String content = AIO.readUTF8EncodedFile(file);
         RenA ner = RenA.rebuild(new File("commons/demo/ner_demo"));
