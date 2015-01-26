@@ -47,7 +47,7 @@ public class RenA {
     }
 
     private List<String> reducer(String text) {
-        Function<String, String> reducer = s -> s.replaceAll("\\.|,|\\(|\\)|:|;|،|؛|؟|\\?|»|«|-|\\\\|/", ""); //remove punctuations
+        Function<String, String> reducer = s -> s.replaceAll("\\.|,|\\(|\\)|:|;|،|؛|؟|\\?|»|«|-|\\\\|/|…", ""); //remove punctuations
         String[] split = text.split("\\s+");
         return Arrays.stream(split)
                 .map(String::trim)
@@ -193,7 +193,7 @@ public class RenA {
             Set<String> set = chunking.chunkSet().
                     stream().
                     map(Chunk::type).
-                    filter(type -> includeTags == null || !includeTags.contains(type)).
+                    filter(type -> includeTags != null && includeTags.contains(type)).
                     collect(Collectors.toSet());
             if (set.size() >= 2) set.remove("O");
             tags.add(new Tuple<>(word, set));
