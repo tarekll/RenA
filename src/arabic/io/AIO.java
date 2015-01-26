@@ -1,6 +1,9 @@
 package arabic.io;
 
 import arabic.normalize.ArabicMarshall;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 
@@ -15,8 +18,7 @@ import java.util.List;
  */
 public class AIO {
     private static final String ENCODING = "UTF-8";
-    public static final String END_OF_ARTICLE = "\n================== END OF ARTICLE ==================\n";
-    public static final String END_OF_PAGE = "================== END OF PAGE ==================";
+    public static final String END_OF_PAGE = "END_OF_PAGE";
 
     public static List<String> readAllLinesInDirectory(File directory) throws IOException {
         List<String> lines = new ArrayList<>();
@@ -63,38 +65,38 @@ public class AIO {
     public static String parsePDFString(File file) throws IOException {
         PDDocument pd = PDDocument.load(new FileInputStream(file));
         PDFTextStripper t = new PDFTextStripper("UTF8");
-        t.setPageEnd(END_OF_PAGE);
-        t.setParagraphEnd(END_OF_ARTICLE);
-        t.setForceParsing(true);
+        t.setPageEnd("\n" + END_OF_PAGE + "\n");
         String text = t.getText(pd);
         pd.close();
 
         return ArabicMarshall.normalize(text);
     }
 
-    public static void parsePDF(File file, String output) throws IOException {
-        String text = parsePDFString(file);
-        if (text.length() <= 50)
-            return; // Are most likely images
+    public static void automate(File file, File path) throws IOException {
+        String content = parsePDFString(file);
+        String[] split = content.split("\n");
 
-        String[] split = text.split(END_OF_PAGE);
-        String filename = file.getName().replace(".pdf", "");
-        File out = new File(output + "/" + filename);
-        out.mkdir();
-
-
-        BufferedWriter writer = new BufferedWriter(
-                new OutputStreamWriter(
-                        new FileOutputStream(new File(out.getPath() + "/" + 0 + ".txt")), Charset.forName("UTF8")));
-        writer.write(text.replaceAll(END_OF_PAGE, ""));
-        writer.close();
-        for (int i = 1; i < split.length; i++) {
-            writer = new BufferedWriter(
-                    new OutputStreamWriter(
-                            new FileOutputStream(new File(out.getPath() + "/" + i + ".txt")), Charset.forName("UTF8")));
-            writer.write(split[i]);
-            writer.close();
+        String filename = FilenameUtils.removeExtension(file.getName());
+        int counter = 1;
+        StringBuilder article = new StringBuilder();
+        for (String line : split) {
+            if (line.trim().isEmpty()) continue;
+            if (line.contains(":") && line.contains("-") || line.trim().equals(END_OF_PAGE)) {
+                if (article.length() != 0) {
+                    writeToFile(article.toString(), path.getPath() + "/" + filename + "/" + counter++ + ".txt");
+                    article.setLength(0);
+                    continue;
+                }
+            }
+            article.append(line).append("\n");
         }
     }
 
+    private static void writeToFile(String content, String path) throws IOException {
+        File file = new File(path);
+        file.getParentFile().mkdirs();
+        BufferedWriter writer = new BufferedWriter(new FileWriterWithEncoding(file, Charset.forName(ENCODING)));
+        writer.write(content);
+        writer.close();
+    }
 }
