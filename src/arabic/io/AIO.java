@@ -12,13 +12,13 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * s0ul on 1/9/15.
  */
 public class AIO {
-    private static final String ENCODING = "UTF-8";
-    public static final String END_OF_PAGE = "END_OF_PAGE";
+    protected static final String ENCODING = "UTF-8";
 
     public static List<String> readAllLinesInDirectory(File directory) throws IOException {
         List<String> lines = new ArrayList<>();
@@ -62,41 +62,5 @@ public class AIO {
         return source;
     }
 
-    public static String parsePDFString(File file) throws IOException {
-        PDDocument pd = PDDocument.load(new FileInputStream(file));
-        PDFTextStripper t = new PDFTextStripper("UTF8");
-        t.setPageEnd("\n" + END_OF_PAGE + "\n");
-        String text = t.getText(pd);
-        pd.close();
 
-        return ArabicMarshall.normalize(text);
-    }
-
-    public static void automate(File file, File path) throws IOException {
-        String content = parsePDFString(file);
-        String[] split = content.split("\n");
-
-        String filename = FilenameUtils.removeExtension(file.getName());
-        int counter = 1;
-        StringBuilder article = new StringBuilder();
-        for (String line : split) {
-            if (line.trim().isEmpty()) continue;
-            if (line.contains(":") && line.contains("-") || line.trim().equals(END_OF_PAGE)) {
-                if (article.length() != 0) {
-                    writeToFile(article.toString(), path.getPath() + "/" + filename + "/" + counter++ + ".txt");
-                    article.setLength(0);
-                    continue;
-                }
-            }
-            article.append(line).append("\n");
-        }
-    }
-
-    private static void writeToFile(String content, String path) throws IOException {
-        File file = new File(path);
-        file.getParentFile().mkdirs();
-        BufferedWriter writer = new BufferedWriter(new FileWriterWithEncoding(file, Charset.forName(ENCODING)));
-        writer.write(content);
-        writer.close();
-    }
 }
