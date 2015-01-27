@@ -190,11 +190,13 @@ public class RenA {
 
         for (String word : reducer) {
             Chunking chunking = chunker.chunk(word);
-            Set<String> set = chunking.chunkSet().
-                    stream().
-                    map(Chunk::type).
-                    filter(type -> includeTags != null && includeTags.contains(type)).
-                    collect(Collectors.toSet());
+            Set<String> set = new HashSet<>();
+            for (Chunk chunk : chunking.chunkSet()) {
+                String type = chunk.type();
+                if (includeTags != null && !includeTags.contains(type)) continue;
+
+                set.add(type);
+            }
             if (set.size() >= 2) set.remove("O");
             tags.add(new Tuple<>(word, set));
         }

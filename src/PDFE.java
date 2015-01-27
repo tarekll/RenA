@@ -1,12 +1,12 @@
-import arabic.io.AIO;
+import arabic.io.AlRayaPDF;
 import arabic.ner.RenA;
 import arabic.ner.Tuple;
+import arabic.stopword.StopWord;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -18,9 +18,17 @@ public class PDFE {
         FileFilter filter = file -> file.getName().endsWith(".pdf");
         File[] files = new File("/Users/s0ul/Documents/Programming/Research/commons/sample/aner_pdf/").listFiles(filter);
         //List<File> files = random_sample(Arrays.asList(f), 4);
-        for (File file : files) {
+        RenA ner = RenA.load(new File("commons/demo/ner_demo"));
+        ner.addStopWord(new StopWord("commons/stopwords/"));
+        for (int i = 0; i < files.length; i++) {
+            File file = files[i];
             System.out.println(file.getName());
-            AIO.automate(file, new File("commons/sample/aner_articles/"));
+            AlRayaPDF.parse(file, new File("commons/sample/aner_articles/"), text -> {
+                Set<Tuple<String, Set<String>>> tag = ner.uniqueTag(text);
+                double unknown = tag.stream().map(Tuple::second).filter(s -> s.contains("UNKNOWN")).count();
+                double ratio = unknown / tag.size();
+                return ratio <= .65 && text.split("\n").length >= 10;
+            });
         }
     }
 

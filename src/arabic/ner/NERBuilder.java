@@ -29,7 +29,10 @@ public class NERBuilder implements Serializable {
         List<String> documents = AIO.readAllLinesInDirectory(new File(directory));
         documents.stream().forEach(s -> {
             Triple<String, String, Integer> word = consumer.accept(s);
-            if (word == null) return;
+            if (word == null) {
+                dictionary.addEntry(new DictionaryEntry<>("", "UNKNOWN", Integer.MIN_VALUE));
+                return;
+            };
             if (exclude)
                 this.exclude.add(new Tuple<>(word.first, word.second));
             else

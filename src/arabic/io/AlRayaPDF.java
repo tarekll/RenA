@@ -1,6 +1,7 @@
 package arabic.io;
 
 import arabic.normalize.ArabicMarshall;
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -13,6 +14,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * s0ul on 1/26/15.
@@ -20,7 +23,7 @@ import java.util.function.Predicate;
 public class AlRayaPDF {
     public static final String END_OF_PAGE = "END_OF_PAGE";
 
-    private static String parsePDFString(File file) throws IOException {
+    public static String parsePDFString(File file) throws IOException {
         PDDocument pd = PDDocument.load(new FileInputStream(file));
         PDFTextStripper t = new PDFTextStripper("UTF8");
         t.setPageEnd("\n" + END_OF_PAGE + "\n");
@@ -44,9 +47,11 @@ public class AlRayaPDF {
             if (isHeader(line)) {
                 if (article.length() != 0) {
                     String text = article.toString();
+                    System.out.println(logic.test(text));
                     if (logic.test(text))
                         writeToFile(text, path.getPath() + "/" + filename + "/" + counter++ + ".txt");
                     article.setLength(0);
+                    if (line.equals(END_OF_PAGE)) continue;
                 }
             }
             article.append(line).append("\n");
@@ -54,7 +59,7 @@ public class AlRayaPDF {
     }
 
     private static boolean isHeader(String line) {
-        return line.contains(":") && line.contains("-") || line.trim().equals(END_OF_PAGE);
+        return line.trim().equals(END_OF_PAGE) || (line.contains("-") || line.contains("\u2013")) && line.contains(":");
     }
 
     private static void writeToFile(String content, String path) throws IOException {

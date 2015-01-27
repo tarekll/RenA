@@ -15,7 +15,7 @@ public class Test {
         ner.addStopWord(new StopWord("commons/stopwords/"));
         String[] keys = {"PERS", "ORG"};
 
-        File file = new File("/Users/s0ul/Documents/Programming/Research/commons/sample/aner_html/universal/3.txt");
+        File file = new File("/Users/s0ul/Documents/Programming/Research/commons/sample/aner_html/egypt/2.txt");
         String result = AIO.readUTF8EncodedFile(file);
 
         Map<String, Set<String>> extract = ner.extract(result, keys);

@@ -1,4 +1,5 @@
 import arabic.io.AIO;
+import arabic.io.AlRayaPDF;
 import arabic.ner.RenA;
 import arabic.stopword.StopWord;
 import org.apache.commons.io.FileUtils;
@@ -23,7 +24,7 @@ public class PDFExtractionOrganizer {
         //List<File> files = PDFE.random_sample(Arrays.asList(f), 10);
         for (File file : f) {
             //AIO.parsePDF(file, "commons/sample/aner_articles/");
-            String result = AIO.parsePDFString(file).trim();
+            String result = AlRayaPDF.parsePDFString(file).trim();
             String filename = file.getName().replace(".pdf", "");
 
             if (result.length() < 100) { // Image
