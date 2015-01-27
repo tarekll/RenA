@@ -1,7 +1,6 @@
 package arabic.io;
 
 import arabic.normalize.ArabicMarshall;
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -12,10 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * s0ul on 1/26/15.
@@ -34,11 +30,17 @@ public class AlRayaPDF {
     }
 
     public static void parse(File file, File path, Predicate<String> predicate) throws IOException {
-        String content = parsePDFString(file);
+        String content;
+        try {
+            content = parsePDFString(file);
+        } catch (IOException e) {
+            return;
+        }
         String[] split = content.split("\n");
 
         Predicate<String> logic = predicate != null ? predicate : s -> true;
 
+        String format = "%s/%s_%d.txt";
         String filename = FilenameUtils.removeExtension(file.getName());
         int counter = 1;
         StringBuilder article = new StringBuilder();
@@ -47,9 +49,8 @@ public class AlRayaPDF {
             if (isHeader(line)) {
                 if (article.length() != 0) {
                     String text = article.toString();
-                    System.out.println(logic.test(text));
                     if (logic.test(text))
-                        writeToFile(text, path.getPath() + "/" + filename + "/" + counter++ + ".txt");
+                        writeToFile(text, String.format(format, path.getPath(), filename, counter++));
                     article.setLength(0);
                     if (line.equals(END_OF_PAGE)) continue;
                 }

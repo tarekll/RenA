@@ -16,14 +16,15 @@ import java.util.Set;
 public class PDFE {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         FileFilter filter = file -> file.getName().endsWith(".pdf");
-        File[] files = new File("/Users/s0ul/Documents/Programming/Research/commons/sample/aner_pdf/").listFiles(filter);
+        File[] files = new File("/Volumes/Tarek/Organized Result/").listFiles(filter);
         //List<File> files = random_sample(Arrays.asList(f), 4);
         RenA ner = RenA.load(new File("commons/demo/ner_demo"));
         ner.addStopWord(new StopWord("commons/stopwords/"));
-        for (int i = 0; i < files.length; i++) {
+        int length = files.length;
+        for (int i = 0; i < length; i++) {
             File file = files[i];
-            System.out.println(file.getName());
-            AlRayaPDF.parse(file, new File("commons/sample/aner_articles/"), text -> {
+            System.out.printf("[%d/%d] %s\n", i, length, file.getName());
+            AlRayaPDF.parse(file, new File("/Volumes/Tarek/Articles/"), text -> {
                 Set<Tuple<String, Set<String>>> tag = ner.uniqueTag(text);
                 double unknown = tag.stream().map(Tuple::second).filter(s -> s.contains("UNKNOWN")).count();
                 double ratio = unknown / tag.size();

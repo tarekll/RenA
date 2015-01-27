@@ -10,15 +10,6 @@ import java.util.Map;
  * s0ul on 1/20/15.
  */
 public class Normalizer extends ArabicNormalizer {
-    private Map<Character, Character> map;
-    public Normalizer() {
-        map = new HashMap<>();
-
-        map.put(ALEF_MADDA, ALEF);
-        map.put(ALEF_HAMZA_ABOVE, ALEF);
-        map.put(ALEF_HAMZA_BELOW, ALEF);
-        map.put(TEH_MARBUTA, HEH);
-    }
     public int normalize(char[] s, int len) {
         for(int i = 0; i < len; ++i) {
             switch(s[i]) {
