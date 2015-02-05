@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * s0ul on 1/9/15.
  */
-public class RenA {
+public class RenA implements NER {
     private ExactDictionaryChunker chunker;
     private Set<Tuple<String, String>> exclusion;
     private StopWord stopwords;
