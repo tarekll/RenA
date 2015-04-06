@@ -5,6 +5,8 @@ import com.aliasi.dict.DictionaryEntry;
 import com.aliasi.dict.MapDictionary;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /**
@@ -30,7 +32,7 @@ public class NERBuilder implements Serializable {
         documents.stream().forEach(s -> {
             Triple<String, String, Integer> word = consumer.accept(s);
             if (word == null) {
-                dictionary.addEntry(new DictionaryEntry<>("", "UNKNOWN", Integer.MIN_VALUE));
+                dictionary.addEntry(new DictionaryEntry<>("", "O", Integer.MIN_VALUE));
                 return;
             };
             if (exclude)
@@ -41,7 +43,17 @@ public class NERBuilder implements Serializable {
     }
 
     public RenA compile() {
-        return new RenA(dictionary, exclude);
+        try {
+            return compile(RenA.class);
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public <K extends NER>K compile(Class<K> clz) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+        Constructor<K> constructor = clz.getConstructor(MapDictionary.class, Set.class);
+        return constructor.newInstance(dictionary, exclude);
     }
 
     public void rebuild() throws IOException {

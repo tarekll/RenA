@@ -55,7 +55,7 @@ public class NER_Demo {
 
     public static void demo_load_extract() throws Exception {
         NERBuilder builder = NERBuilder.load(new File("commons/demo/ner_demo"));
-        RenA ner = builder.compile();
+        RenA ner = builder.compile(RenA.class);
         ner.addStopWord(new StopWord("commons/stopwords/"));
         System.out.println(ner.extract(
                 AIO.readUTF8EncodedFile(
@@ -69,7 +69,7 @@ public class NER_Demo {
         ner.addStopWord(new StopWord("commons/stopwords/"));
 
         String content = AIO.readUTF8EncodedFile(new File("commons/sample/aner_sample/basic_aner_test.txt"));
-        System.out.println(ner.tag(content));
+        System.out.println(ner.uniqueTag(content, "PERS", "ORG"));
     }
 
     public static void demo_load_extract_and_evaluate() throws Exception {
@@ -85,8 +85,8 @@ public class NER_Demo {
 
     public static void main(String[] args) throws Exception {
         demo_save();
-        demo_load_extract();
+        //demo_load_extract();
         //demo_load_extract_and_evaluate();
-        //demo_load_tag();
+        demo_load_tag();
     }
 }

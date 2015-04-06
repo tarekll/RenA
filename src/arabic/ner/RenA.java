@@ -23,7 +23,7 @@ public class RenA implements NER {
     private StopWord stopwords;
     private Set<String> exception;
 
-    protected RenA(MapDictionary<String> dictionary, Set<Tuple<String, String>> exclusion) {
+    public RenA(MapDictionary<String> dictionary, Set<Tuple<String, String>> exclusion) {
         chunker = new ExactDictionaryChunker(dictionary, IndoEuropeanTokenizerFactory.INSTANCE);
         this.exclusion = exclusion;
         exception = new HashSet<>(Arrays.asList("ال", "ابن", "بن", "اﺑﻮ"));
@@ -112,76 +112,6 @@ public class RenA implements NER {
         return complete;
     }
 
-    /*public Map<String, List<String>> extract(String text, String[] keys) throws Exception {
-        if (stopwords == null)
-            throw new Exception("No stop words added. Add stop words by calling addStopWord()");
-        Set<String> include = keys == null ? null : new HashSet<>(Arrays.asList(keys));
-
-        Map<String, List<Tuple<String, Tuple<Integer, Integer>>>> ner_result = new HashMap<>();
-        text = text.replaceAll("[^\\S\\r\\n]\\s+", " ");
-        Chunking chunking = chunker.chunk(text);
-
-        for (Chunk chunk : chunking.chunkSet()) {
-            int start = chunk.start();
-            int end = chunk.end();
-            String tag = chunk.type();
-            if (include != null && !include.contains(tag)) continue;
-            String phrase = ArabicMarshall.normalize(text.substring(start, chunk.end()));
-
-            if (exclusion.contains(new Tuple<>(phrase, tag))) continue;
-            if (phrase.length() == 1) continue;
-            List<Tuple<String, Tuple<Integer, Integer>>> list = ner_result.get(tag);
-            if (list == null) {
-                list = new ArrayList<>();
-                ner_result.put(tag, list);
-            }
-            list.add(new Tuple<>(phrase, new Tuple<>(start, end)));
-        }
-        List<String> pers = new ArrayList<>();
-        if (ner_result.containsKey("PERS")) {
-            ner_result.get("PERS").stream().forEach(t -> pers.add(t.first));
-        }
-        HashSet<String> exclude = pers.isEmpty() ? null : new HashSet<>(pers);
-
-        Map<String, List<String>> join_result = new HashMap<>();
-        ner_result.keySet().parallelStream().forEach(key -> {
-            List<Tuple<String, Tuple<Integer, Integer>>> r = ner_result.get(key);
-            List<String> join = new ArrayList<>();
-            String previous = null;
-            int prevEnd = -2;
-            for (Tuple<String, Tuple<Integer, Integer>> phrase : r) {
-                String word = phrase.first;
-                if (key.equals("ORG") && exclude != null && exclude.contains(word)) continue;
-
-                int start = phrase.second.first;
-                int end = phrase.second.second;
-
-                if (previous == null) {
-                    previous = word;
-                } else if ((prevEnd + 1) == start) {
-                    previous += " " + word;
-                } else {
-                    addHelper(join, previous);
-                    previous = word;
-                }
-                prevEnd = end;
-            }
-            addHelper(join, previous);
-            join_result.put(key, join);
-        });
-
-        // Finally clean up stopwords here (Doing this here is much more effective as opposed to within the tagging)
-        Map<String, List<String>> final_result = new HashMap<>();
-        join_result.keySet().stream().forEach(key -> {
-            List<String> collect = join_result.get(key).stream().
-                    filter(s -> !stopwords.contains(s)).
-                    collect(Collectors.toCollection(ArrayList::new));
-            if (collect.isEmpty()) return;
-            final_result.put(key, collect);
-        });
-        return final_result;
-    }*/
-
     public List<Tuple<String, Set<String>>> tag(String text, String... include) {
         Set<String> includeTags = include.length == 0 ? null : new HashSet<>(Arrays.asList(include));
 
@@ -194,10 +124,12 @@ public class RenA implements NER {
             for (Chunk chunk : chunking.chunkSet()) {
                 String type = chunk.type();
                 if (includeTags != null && !includeTags.contains(type)) continue;
+                if (stopwords.contains(word) && !exception.contains(word)) continue;
 
                 set.add(type);
             }
             if (set.size() >= 2) set.remove("O");
+            if (set.isEmpty()) continue;
             tags.add(new Tuple<>(word, set));
         }
         return tags;

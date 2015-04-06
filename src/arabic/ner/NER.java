@@ -1,5 +1,7 @@
 package arabic.ner;
 
+import arabic.stopword.StopWord;
+
 import java.util.List;
 import java.util.Set;
 
@@ -9,4 +11,5 @@ import java.util.Set;
 public interface NER {
     public List<Tuple<String, Set<String>>> tag(String text, String... include);
     public Set<Tuple<String, Set<String>>> uniqueTag(String text, String... include);
+    public void addStopWord(StopWord sw);
 }
