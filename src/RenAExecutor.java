@@ -43,7 +43,7 @@ public class RenAExecutor {
                 Map<String, Set<String>> extract = ner.extract(content, ngram, list.toArray(new String[list.size()]));
 
                 String result = gson.toJson(extract);
-                result = String.format("{\"filename\":\"%s\",\n", f.getName()) + result.substring(1);
+                result = String.format("{\n  \"filename\":\"%s\",", f.getName()) + result.substring(1);
                 System.out.println(result);
             }
         } else if (length == 4 && args[0].equalsIgnoreCase("attributes")) {
