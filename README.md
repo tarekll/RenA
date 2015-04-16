@@ -13,16 +13,24 @@ Usage
 Example
 --------
     #For named entity extraction for a single file,
-    java -jar bin/RenA.jar entities 2 true true true filename.txt commons/classifier/rena.cls commons/stopwords/ > output.txt
+    java -jar bin/RenA.jar entities 2 true true true filename.txt \
+            commons/classifier/rena.cls \
+            commons/stopwords/ > output.txt
 
     #For directory,
-    java -jar bin/RenA.jar entities 2 true true true path_to_directory/ commons/classifier/rena.cls commons/stopwords/ > output.txt
+    java -jar bin/RenA.jar entities 2 true true true path_to_directory/ \
+            commons/classifier/rena.cls \
+            commons/stopwords/ > output.txt
 
     #For Attribute extraction,
-    java -jar bin/RenA.jar attributes filename.txt commons/classifier/rena.cls commons/stopwords/ > output.txt
+    java -jar bin/RenA.jar attributes filename.txt \
+            commons/classifier/rena.cls \
+            commons/stopwords/ > output.txt
     
     #For Multiple File Attribute extraction,
-    java -jar bin/RenA.jar attributes path_to_directory/ commons/classifier/rena.cls commons/stopwords/ > output.txt   
+    java -jar bin/RenA.jar attributes path_to_directory/ \
+            commons/classifier/rena.cls \
+            commons/stopwords/ > output.txt   
     
 Output
 ------
