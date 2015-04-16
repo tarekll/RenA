@@ -5,7 +5,9 @@ Requirements
 
 Usage
 -----
-	java -jar bin/RenA.jar entities [ngram] [name_ent_bool] [org_ent_bool] [loc_ent_bool] [FileOrFolder] [classifier] [stopwords]
+	java -jar bin/RenA.jar entities [ngram] [name_ent_bool] \
+	            [org_ent_bool] [loc_ent_bool] [FileOrFolder] \
+	            [classifier] [stopwords]
 	java -jar bin/RenA.jar attributes [FileOrFolder] [classifier] [stopwords]
 
 Example
