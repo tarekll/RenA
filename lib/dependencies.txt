@@ -25,3 +25,6 @@ stanford-ner-2014-10-26
 tika-core-1.6-javadoc.jar
 tika-core-1.6-sources.jar
 tika-core-1.6.jar
+gson-2.3.1.jar
+gson-2.3.1-javadoc.jar
+gson-2.3.1-sources.jar
