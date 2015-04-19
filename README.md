@@ -7,8 +7,7 @@ Usage
 -----
 	java -jar bin/RenA.jar entities [ngram] [name_ent_bool] \
 	            [org_ent_bool] [loc_ent_bool] [FileOrFolder] \
-	            [classifier] [stopwords]
-	java -jar bin/RenA.jar attributes [FileOrFolder] [classifier] [stopwords]
+	            [classifier] [stopwords] (output_dir)
 
 Example
 --------
@@ -36,7 +35,6 @@ Output
 ------
 Results will be displayed in JSON, consisting of:
 
-    filename    - name of the file analyzed
     PERS        - Names extracted from entities
     ORG         - Organizations extracted from entities
     LOC         - Locations extracted from entities
