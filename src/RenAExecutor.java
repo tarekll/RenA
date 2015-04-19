@@ -55,7 +55,7 @@ public class RenAExecutor {
                 if (length != 9)
                     System.out.println(result);
                 else {
-                    File out = new File(args[8], FilenameUtils.getBaseName(f.getName()) + "_attribtue_ner.txt");
+                    File out = new File(args[8], FilenameUtils.getBaseName(f.getName()) + "_attribtue_ner.json");
                     writeToFile(out, result);
                 }
             }
