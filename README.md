@@ -41,3 +41,10 @@ Results will be displayed in JSON, consisting of:
     date        - Date extracted from attributes if any
     author      - Author of the article from attribute if any
     title       - Title of the article extracted from attribute
+    
+Conjunction with ALDA
+------
+Suppose you used https://github.com/souleiman/ALDA to collect topics and want to merge the collected topics.
+
+	> util/merge_all.py [path_to_alda_json_files] [path_to_all_ner_attribute_json_files] [merged_output_directory]
+	
