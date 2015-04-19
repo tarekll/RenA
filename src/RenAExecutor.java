@@ -35,7 +35,9 @@ public class RenAExecutor {
             File[] files = null;
             File file = new File(args[5]);
             if (file.isDirectory()) {
-                files = file.listFiles();
+                files = file.listFiles((dir, name) -> {
+                    return name.endsWith(".txt");
+                });
             }
 
             for (File f : files != null ? files : new File[] {file}) {
