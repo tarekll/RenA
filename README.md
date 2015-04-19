@@ -46,5 +46,6 @@ Conjunction with ALDA
 ------
 Suppose you used https://github.com/souleiman/ALDA to collect topics and want to merge the collected topics.
 
-	> util/merge_all.py [path_to_alda_json_files] [path_to_all_ner_attribute_json_files] [merged_output_directory]
-	
+	> util/merge_all.py [path_to_alda_json_files] \
+			    [path_to_all_ner_attribute_json_files] \
+			    [merged_output_directory]	
