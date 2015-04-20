@@ -22,6 +22,7 @@ if __name__ == '__main__':
     ner_files = [file for file in listdir(argv[2]) if file.endswith('attribute_ner.json')]
 
     if len(alda_files) != len(ner_files):
+        print(len(alda_files), len(ner_files))
         print('Count mismatch between ALDA and NER files')
         exit(1)
 
