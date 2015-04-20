@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # coding=utf-8
 
 __author__ = 'Souleiman Ayoub'
@@ -22,7 +22,6 @@ if __name__ == '__main__':
     ner_files = [file for file in listdir(argv[2]) if file.endswith('attribute_ner.json')]
 
     if len(alda_files) != len(ner_files):
-        print(len(alda_files), len(ner_files))
         print('Count mismatch between ALDA and NER files')
         exit(1)
 
@@ -30,12 +29,12 @@ if __name__ == '__main__':
         alda_file = alda_files[i]
         ner_file = alda_file.replace('alda', 'attribute_ner')
         with codecs.open(os.path.join(argv[1], alda_file), 'r', encoding='UTF-8') as a, \
-                codecs.open(os.path.join(argv[1], ner_file), 'r', encoding='UTF-8') as n:
+                codecs.open(os.path.join(argv[2], ner_file), 'r', encoding='UTF-8') as n:
             alda = json.loads(a.read(), encoding='UTF-8')
             ner = json.loads(n.read(), encoding='UTF-8')
 
-        both = alda.copy()
-        both.update(ner)
+        both = ner.copy()
+        both["Topics"] = alda
         filename = alda_file.replace('alda.json', 'final.json')
         with codecs.open(os.path.join(argv[3], filename), 'w', encoding='utf-8') as w:
-            w.write(str(both).replace('\'', '\"'))
+            w.write(json.dumps(both, ensure_ascii=False, indent=2))
