@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # coding=utf-8
 
 __author__ = 'Souleiman Ayoub'
@@ -10,9 +10,9 @@ import codecs
 from os import listdir
 from sys import argv
 
-# argv := merge_all.py [path_to_alda_dir] [path_to_ner_attrib_dir] [output_dir]
+# argv := merge_all.py [path_to_alda_dir] [path_to_ner_attrib_dir] [output_dir] ([classifier_dir] [classifier_indentifier])
 
-if len(argv) != 4:
+if len(argv) < 4:
     print('Invalid Parameters!')
     print('merge_all.py [path_to_alda_dir] [path_to_ner_attrib_dir] [output_dir]')
     exit(1)
@@ -32,6 +32,11 @@ if __name__ == '__main__':
                 codecs.open(os.path.join(argv[2], ner_file), 'r', encoding='UTF-8') as n:
             alda = json.loads(a.read(), encoding='UTF-8')
             ner = json.loads(n.read(), encoding='UTF-8')
+
+            if len(argv) == 6:
+                cls_file = alda_file.replace('alda', argv[5])
+                with codecs.open(os.path.join(argv[4], cls_file), 'r', encoding='UTF-8') as c:
+                    ner['category'] = json.loads(c.read(), encoding='UTF-8')
 
         both = ner.copy()
         both["Topics"] = alda
