@@ -48,4 +48,4 @@ Suppose you used https://github.com/souleiman/ALDA to collect topics and want to
 
 	> util/merge_all.py [path_to_alda_json_files] \
 			    [path_to_all_ner_attribute_json_files] \
-			    [merged_output_directory] [classifier_directory]
+			    [merged_output_directory] (classifier_directory)
