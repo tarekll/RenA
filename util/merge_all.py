@@ -10,7 +10,7 @@ import codecs
 from os import listdir
 from sys import argv
 
-# argv := merge_all.py [path_to_alda_dir] [path_to_ner_attrib_dir] [output_dir] ([classifier_dir] [classifier_indentifier])
+# argv := merge_all.py [path_to_alda_dir] [path_to_ner_attrib_dir] [output_dir] [classifier_dir]
 
 if len(argv) < 4:
     print('Invalid Parameters!')
@@ -33,8 +33,8 @@ if __name__ == '__main__':
             alda = json.loads(a.read(), encoding='UTF-8')
             ner = json.loads(n.read(), encoding='UTF-8')
 
-            if len(argv) == 6:
-                cls_file = alda_file.replace('alda', argv[5])
+            if len(argv) == 5:
+                cls_file = alda_file.replace('alda', 'cls')
                 with codecs.open(os.path.join(argv[4], cls_file), 'r', encoding='UTF-8') as c:
                     ner['category'] = json.loads(c.read(), encoding='UTF-8')
 
